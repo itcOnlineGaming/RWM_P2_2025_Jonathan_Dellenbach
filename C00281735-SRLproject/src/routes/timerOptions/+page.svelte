@@ -10,7 +10,7 @@
 
 	function handleDurationSelect(duration: number) {
 		selectedDuration = duration;
-		// save duration to store immediately when user selects
+		// save duration to store
 		visualStore.setDuration(duration);
 	}
 

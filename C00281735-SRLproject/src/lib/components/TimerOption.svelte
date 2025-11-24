@@ -22,7 +22,6 @@
 </script>
 
 <div class="timer-selector">
-	<!-- Visual Display Area -->
 	<div class="visual-display-container">
 		<div class="visual-box">
 			{#if selectedVisual === 'lava-lamp'}

@@ -4,24 +4,24 @@
 	import { base } from '$app/paths';
 	import { goto } from '$app/navigation';
 
-	// Subscribe to the store to get the current selected visual
+	//get the store to get the current selected visual
 	let selectedVisual = $state<string | null>($visualStore.selectedVisual);
 
 	function handleVisualSelect(visual: string) {
 		selectedVisual = visual;
-		// Save to store immediately when user selects
+		//save to store when user selects
 		visualStore.setVisual(visual as 'lava-lamp' | 'flowing-goo');
 	}
 
 	function handleSubmit() {
 		if (selectedVisual) {
-			// Store is already updated, so we can navigate
+			//store is already updated 
 			console.log('Selected visual stored:', selectedVisual);
 			
 			// Navigate to the next page
 			goto(`${base}/timerOptions`);
 			
-			// For now, just show confirmation
+			//just show confirmation
 			alert(`Visual "${selectedVisual}" has been saved!`);
 		}
 	}
