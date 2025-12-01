@@ -6,6 +6,7 @@
 
 <a href={`${base}/visualOptions`}>Go to visual</a>
 <a href={`${base}/timerOptions`}>Go to timer</a>
+<a href={`${base}/lavaLampVisual`}>Go to lava-lamp</a>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />

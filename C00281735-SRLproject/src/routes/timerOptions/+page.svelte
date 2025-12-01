@@ -23,7 +23,7 @@
 			
 			console.log('Stored state:', visualStore.getState());
 			
-			// goto(`${base}/meditation`);
+			goto(`${base}/lavaLampVisual`);
 			
 			alert(`Starting ${selectedDuration} second meditation with ${selectedVisual} visual!`);
 		}
