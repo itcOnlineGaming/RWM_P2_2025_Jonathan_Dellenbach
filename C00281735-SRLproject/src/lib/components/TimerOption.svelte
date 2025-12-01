@@ -8,12 +8,12 @@
 
 	let { onSelect, selectedDuration = null, onStart, selectedVisual = null }: Props = $props();
 
-	const durations = [
+	const durations = [ //suits 4-2-4 breathing pattern
 		{ value: 30, label: '30', unit: 'Sec' },
+		{ value: 60, label: '1', unit: 'Min' },
 		{ value: 180, label: '3', unit: 'Min' },
 		{ value: 300, label: '5', unit: 'Min' },
-		{ value: 600, label: '10', unit: 'Min' },
-		{ value: 900, label: '15', unit: 'Min' }
+		{ value: 600, label: '10', unit: 'Min' }
 	];
 
 	function handleSelect(duration: number) {
