@@ -10,7 +10,8 @@
 	let isPaused = $state(false);
 	let phase = $state<'expand' | 'hold-top' | 'contract' | 'hold-bottom'>('expand');
 	let cycleCount = $state(0);
-	let scale = $state(0.5);
+	let width = $state(40); // width as percentage
+	let flowOffset = $state(0);
 
 	let startTime: number;
 	let pausedTime = 0;
@@ -18,6 +19,7 @@
 	let animationFrameId: number;
 
 	const totalCycles = Math.floor(duration / 12); // 12-second cycles for 4-2-4-2 pattern
+	const WAVE_PERIOD = 30; // Wave repeats every 30 units for seamless loop
 
 	function animate() {
 		if (!isPaused) {
@@ -25,34 +27,37 @@
 			const remaining = Math.max(0, duration - elapsed);
 			timeRemaining = remaining;
 
-			//calculate current position in the 12-second cycle
+			// Calculate current position in the 12-second cycle
 			const cyclePosition = elapsed % 12;
 			const currentCycle = Math.floor(elapsed / 12);
 			
 			cycleCount = currentCycle;
 
-			//determine phase and scale based on position in cycle
+			// Continuous flowing animation - seamless loop that repeats every WAVE_PERIOD
+			flowOffset = (elapsed * 15) % WAVE_PERIOD;
+
+			// Determine phase and width based on position in cycle
 			if (cyclePosition < 4) {
-				//breathe In: 0-4 seconds
+				// Breathe In: 0-4 seconds
 				phase = 'expand';
-				// Expand: 0.5 to 1.0 over 4 seconds
-				scale = 0.5 + (cyclePosition / 4) * 0.5;
+				// Expand: 40% to 70% over 4 seconds
+				width = 40 + (cyclePosition / 4) * 30;
 			} else if (cyclePosition < 6) {
-				//hold (at top): 4-6 seconds
+				// Hold (at top): 4-6 seconds
 				phase = 'hold-top';
-				//hold: stay at 1.0
-				scale = 1.0;
+				// Hold: stay at 70%
+				width = 70;
 			} else if (cyclePosition < 10) {
-				//breathe Out: 6-10 seconds
+				// Breathe Out: 6-10 seconds
 				phase = 'contract';
-				//contract: 1.0 to 0.5 over 4 seconds
+				// Contract: 70% to 40% over 4 seconds
 				const contractProgress = (cyclePosition - 6) / 4;
-				scale = 1.0 - (contractProgress * 0.5);
+				width = 70 - (contractProgress * 30);
 			} else {
-				//hold (at bottom): 10-12 seconds
+				// Hold (at bottom): 10-12 seconds
 				phase = 'hold-bottom';
-				//hold: stay at 0.5
-				scale = 0.5;
+				// Hold: stay at 40%
+				width = 40;
 			}
 
 			if (remaining > 0) {
@@ -109,6 +114,38 @@
 		}
 	}
 
+	// Generate seamless wave path that loops perfectly
+	function generateWavePath(leftX: number, rightX: number, offset: number): string {
+		const segments = 8; // Number of wave segments to cover the visible area
+		let path = `M ${leftX} ${-WAVE_PERIOD + offset}`;
+		
+		// Create smooth wave on left edge
+		for (let i = 0; i < segments; i++) {
+			const y = -WAVE_PERIOD + offset + (i * WAVE_PERIOD);
+			const y1 = y + WAVE_PERIOD * 0.25;
+			const y2 = y + WAVE_PERIOD * 0.75;
+			const y3 = y + WAVE_PERIOD;
+			
+			path += ` C ${leftX - 6} ${y1}, ${leftX + 6} ${y2}, ${leftX} ${y3}`;
+		}
+		
+		// Connect to right side at bottom
+		path += ` L ${rightX} ${-WAVE_PERIOD + offset + (segments * WAVE_PERIOD)}`;
+		
+		// Create smooth wave on right edge going back up
+		for (let i = segments - 1; i >= 0; i--) {
+			const y = -WAVE_PERIOD + offset + (i * WAVE_PERIOD);
+			const y1 = y + WAVE_PERIOD * 0.75;
+			const y2 = y + WAVE_PERIOD * 0.25;
+			const y3 = y;
+			
+			path += ` C ${rightX + 6} ${y1}, ${rightX - 6} ${y2}, ${rightX} ${y3}`;
+		}
+		
+		path += ' Z';
+		return path;
+	}
+
 	$effect(() => {
 		startTime = Date.now();
 		animationFrameId = requestAnimationFrame(animate);
@@ -128,10 +165,20 @@
 
 	<div class="visual-display-container">
 		<div class="visual-box">
-			<div 
-				class="lava-lamp"
-				style="transform: scale({scale});"
-			></div>
+			<svg class="river-svg" viewBox="0 0 100 200" preserveAspectRatio="none">
+				<defs>
+					<linearGradient id="riverGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+						<stop offset="0%" style="stop-color:#E84545;stop-opacity:0.9" />
+						<stop offset="50%" style="stop-color:#E84545;stop-opacity:1" />
+						<stop offset="100%" style="stop-color:#E84545;stop-opacity:0.9" />
+					</linearGradient>
+				</defs>
+				<!-- Flowing goo with seamless waves -->
+				<path
+					d={generateWavePath(50 - width/2, 50 + width/2, flowOffset)}
+					fill="url(#riverGradient)"
+				/>
+			</svg>
 		</div>
 	</div>
 
@@ -183,14 +230,12 @@
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
+		position: relative;
 	}
 
-	.lava-lamp {
-		width: 60%;
-		height: 60%;
-		background-color: #5DBBDE;
-		border-radius: 60% 40% 50% 50%;
-		/* Remove transition - we're animating via requestAnimationFrame */
+	.river-svg {
+		width: 100%;
+		height: 100%;
 	}
 
 	.instruction-container {

@@ -23,16 +23,19 @@
 			
 			console.log('Stored state:', visualStore.getState());
 			
-			goto(`${base}/lavaLampVisual`);
-			
-			alert(`Starting ${selectedDuration} second meditation with ${selectedVisual} visual!`);
+			// Navigate to the correct visual page based on selection
+			if (selectedVisual === 'lava-lamp') {
+				goto(`${base}/lavaLampVisual`);
+			} else if (selectedVisual === 'flowing-goo') {
+				goto(`${base}/flowingGooVisual`);
+			}
 		}
 	}
 
 	$effect(() => {
 		if (!selectedVisual) {
 			console.log('No visual selected, redirecting...');
-			// goto(`${base}/visualOptions`);
+			goto(`${base}/visualOptions`);
 		}
 	});
 </script>
