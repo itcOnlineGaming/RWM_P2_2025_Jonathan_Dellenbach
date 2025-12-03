@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { base } from '$app/paths';
+
 	interface Props {
 		onSelect: (duration: number) => void;
 		selectedDuration?: number | null;
@@ -49,13 +51,21 @@
 		{/each}
 	</div>
 
-	<button
-		class="start-button"
-		onclick={onStart}
-		disabled={selectedDuration === null}
-	>
-		Start
-	</button>
+	<div class="button-group">
+		<button
+			class="back-button"
+			onclick={() => window.history.back()}
+		>
+			Back
+		</button>
+		<button
+			class="start-button"
+			onclick={onStart}
+			disabled={selectedDuration === null}
+		>
+			Start
+		</button>
+	</div>
 </div>
 
 <style>
@@ -159,6 +169,36 @@
 		font-size: 0.875rem;
 		font-weight: 500;
 		opacity: 0.9;
+	}
+
+	.button-group {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		max-width: 400px;
+		margin: 0 auto;
+	}
+
+	.back-button {
+		padding: 0.875rem 2rem;
+		background-color: #666;
+		color: white;
+		border: none;
+		border-radius: 8px;
+		font-weight: 600;
+		font-size: 1.125rem;
+		box-shadow: 0 3px 8px rgba(102, 102, 102, 0.3);
+		transition: all 0.3s ease;
+		cursor: pointer;
+		flex: 1;
+	}
+
+	.back-button:hover {
+		background-color: #555;
+		transform: translateY(-2px);
+		box-shadow: 0 5px 12px rgba(102, 102, 102, 0.4);
 	}
 
 	.start-button {

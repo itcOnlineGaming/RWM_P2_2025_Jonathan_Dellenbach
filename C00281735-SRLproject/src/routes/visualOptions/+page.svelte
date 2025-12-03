@@ -39,7 +39,7 @@
 	.page-container {
 		height: 100vh;
 		width: 100vw;
-		background-color: #d2612f;
+		background-color: #e8a87c;;
 		display: flex;
 		align-items: center;
 		justify-content: center;
