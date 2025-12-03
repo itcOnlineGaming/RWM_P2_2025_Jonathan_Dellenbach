@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { meditationQuotes } from '$lib/quotes/quoteData';
+
 	interface Props {
 		duration: number; // duration in seconds
 		onComplete?: () => void;
@@ -11,6 +13,8 @@
 	let phase = $state<'expand' | 'hold-top' | 'contract' | 'hold-bottom'>('expand');
 	let cycleCount = $state(0);
 	let scale = $state(0.5);
+	let currentQuote = $state(meditationQuotes[0]);
+	let lastCycleForQuote = -1;
 
 	let startTime: number;
 	let pausedTime = 0;
@@ -30,6 +34,13 @@
 			const currentCycle = Math.floor(elapsed / 12);
 			
 			cycleCount = currentCycle;
+
+			// Change quote every cycle (every 12 seconds)
+			if (currentCycle !== lastCycleForQuote && currentCycle > 0) {
+				const randomIndex = Math.floor(Math.random() * meditationQuotes.length);
+				currentQuote = meditationQuotes[randomIndex];
+				lastCycleForQuote = currentCycle;
+			}
 
 			//determine phase and scale based on position in cycle
 			if (cyclePosition < 4) {
@@ -140,6 +151,10 @@
 		<div class="phase-duration">{getPhaseDuration()}</div>
 	</div>
 
+	<div class="quote-container">
+		<p class="quote-text">"{currentQuote}"</p>
+	</div>
+
 	<button class="pause-button" onclick={togglePause}>
 		{isPaused ? 'Resume' : 'Pause'}
 	</button>
@@ -211,6 +226,22 @@
 		letter-spacing: 0.05em;
 	}
 
+	.quote-container {
+		margin-bottom: 1.5rem;
+		padding: 1rem 1.5rem;
+		background: rgba(255, 255, 255, 0.5);
+		border-radius: 8px;
+		border-left: 4px solid #5DBBDE;
+		transition: opacity 0.5s ease;
+	}
+
+	.quote-text {
+		font-size: 1rem;
+		color: #333;
+		line-height: 1.6;
+		margin: 0;
+	}
+
 	.pause-button {
 		padding: 0.875rem 3rem;
 		background-color: #4CAF50;
@@ -248,6 +279,10 @@
 
 		.phase-instruction {
 			font-size: 1.5rem;
+		}
+
+		.quote-text {
+			font-size: 0.875rem;
 		}
 	}
 </style>
