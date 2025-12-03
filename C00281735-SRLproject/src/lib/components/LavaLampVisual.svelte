@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { meditationQuotes } from '$lib/quotes/quoteData';
 
 	interface Props {
@@ -155,9 +156,16 @@
 		<p class="quote-text">"{currentQuote}"</p>
 	</div>
 
-	<button class="pause-button" onclick={togglePause}>
-		{isPaused ? 'Resume' : 'Pause'}
-	</button>
+	<div class="button-group">
+		<a href={`${base}/conclusion`}>
+			<button class="skip-button">
+				Finish
+			</button>
+		</a>
+		<button class="pause-button" onclick={togglePause}>
+			{isPaused ? 'Resume' : 'Pause'}
+		</button>
+	</div>
 </div>
 
 <style>
@@ -169,6 +177,36 @@
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 		max-width: 600px;
 		width: 100%;
+	}
+
+	.button-group {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		max-width: 400px;
+		margin: 0 auto;
+	}
+
+	.skip-button {
+		padding: 0.875rem 2rem;
+		background-color: #666;
+		color: white;
+		border: none;
+		border-radius: 8px;
+		font-weight: 600;
+		font-size: 1.125rem;
+		box-shadow: 0 3px 8px rgba(102, 102, 102, 0.3);
+		transition: all 0.3s ease;
+		cursor: pointer;
+		flex: 1;
+	}
+
+	.skip-button:hover {
+		background-color: #555;
+		transform: translateY(-2px);
+		box-shadow: 0 5px 12px rgba(102, 102, 102, 0.4);
 	}
 
 	.timer-display {

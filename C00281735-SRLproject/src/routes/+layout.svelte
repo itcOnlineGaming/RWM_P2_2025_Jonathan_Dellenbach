@@ -8,6 +8,7 @@
 <a href={`${base}/timerOptions`}>Go to timer</a>
 <a href={`${base}/lavaLampVisual`}>Go to lava-lamp</a>
 <a href={`${base}/flowingGooVisual`}>Go to flowing-goo</a>
+<a href={`${base}/conclusion`}>Go to conclusion</a>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
