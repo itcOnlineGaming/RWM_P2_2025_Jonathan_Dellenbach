@@ -27,7 +27,7 @@
 			{#if selectedVisual === 'lava-lamp'}
 				<div class="placeholder lava-lamp"></div>
 			{:else if selectedVisual === 'flowing-goo'}
-				<div class="placeholder flowing-goo"></div>
+				<img src="Images/FlowingGoo.png" alt="Flowing Goo" class="flowing-goo-image" />
 			{:else}
 				<div class="visual-placeholder">No visual selected</div>
 			{/if}
@@ -88,20 +88,20 @@
 	}
 
 	.placeholder {
-		width: 60%;
-		height: 60%;
+		width: 90%;
+		height: 90%;
 	}
 
 	.placeholder.lava-lamp {
 		background-color: #5DBBDE;
 		border-radius: 60% 40% 50% 50%;
 	}
-
-	.placeholder.flowing-goo {
-		background-color: #E84545;
-		border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-		width: 80%;
-		height: 80%;
+	
+	.flowing-goo-image {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		display: block;
 	}
 
 	.visual-placeholder {
