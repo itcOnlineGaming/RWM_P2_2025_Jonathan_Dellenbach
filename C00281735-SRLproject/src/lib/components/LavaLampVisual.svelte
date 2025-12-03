@@ -8,7 +8,7 @@
 
 	let timeRemaining = $state(duration);
 	let isPaused = $state(false);
-	let phase = $state<'expand' | 'hold' | 'contract'>('expand');
+	let phase = $state<'expand' | 'hold-top' | 'contract' | 'hold-bottom'>('expand');
 	let cycleCount = $state(0);
 	let scale = $state(0.5);
 
@@ -17,7 +17,7 @@
 	let pauseStartTime = 0;
 	let animationFrameId: number;
 
-	const totalCycles = Math.floor(duration / 10);
+	const totalCycles = Math.floor(duration / 12); // 12-second cycles for 4-2-4-2 pattern
 
 	function animate() {
 		if (!isPaused) {
@@ -25,26 +25,34 @@
 			const remaining = Math.max(0, duration - elapsed);
 			timeRemaining = remaining;
 
-			//calculate current position in the 10-second cycle
-			const cyclePosition = elapsed % 10;
-			const currentCycle = Math.floor(elapsed / 10);
+			//calculate current position in the 12-second cycle
+			const cyclePosition = elapsed % 12;
+			const currentCycle = Math.floor(elapsed / 12);
 			
 			cycleCount = currentCycle;
 
 			//determine phase and scale based on position in cycle
 			if (cyclePosition < 4) {
+				//breathe In: 0-4 seconds
 				phase = 'expand';
-				//expand: 0.5 to 1.0 over 4 seconds
+				// Expand: 0.5 to 1.0 over 4 seconds
 				scale = 0.5 + (cyclePosition / 4) * 0.5;
 			} else if (cyclePosition < 6) {
-				phase = 'hold';
+				//hold (at top): 4-6 seconds
+				phase = 'hold-top';
 				//hold: stay at 1.0
 				scale = 1.0;
-			} else {
+			} else if (cyclePosition < 10) {
+				//breathe Out: 6-10 seconds
 				phase = 'contract';
 				//contract: 1.0 to 0.5 over 4 seconds
 				const contractProgress = (cyclePosition - 6) / 4;
 				scale = 1.0 - (contractProgress * 0.5);
+			} else {
+				//hold (at bottom): 10-12 seconds
+				phase = 'hold-bottom';
+				//hold: stay at 0.5
+				scale = 0.5;
 			}
 
 			if (remaining > 0) {
@@ -77,7 +85,8 @@
 		switch (phase) {
 			case 'expand':
 				return 'Breathe In';
-			case 'hold':
+			case 'hold-top':
+			case 'hold-bottom':
 				return 'Hold';
 			case 'contract':
 				return 'Breathe Out';
@@ -90,7 +99,8 @@
 		switch (phase) {
 			case 'expand':
 				return '4 seconds';
-			case 'hold':
+			case 'hold-top':
+			case 'hold-bottom':
 				return '2 seconds';
 			case 'contract':
 				return '4 seconds';
@@ -186,7 +196,7 @@
 		height: 60%;
 		background-color: #5DBBDE;
 		border-radius: 60% 40% 50% 50%;
-		transition: transform 1s ease-in-out;
+		/* Remove transition - we're animating via requestAnimationFrame */
 	}
 
 	.instruction-container {
