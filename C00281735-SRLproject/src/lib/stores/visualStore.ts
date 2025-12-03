@@ -5,13 +5,21 @@ export type VisualType = 'lava-lamp' | 'flowing-goo' | null;
 interface MeditationState {
 	selectedVisual: VisualType;
 	selectedDuration: number | null; // duration in seconds
+	moodBefore: string | null; // mood selected before meditation
+	intensityBefore: number | null; // intensity before meditation
+	moodAfter: string | null; // mood selected after meditation
+	intensityAfter: number | null; // intensity after meditation
 }
 
 //create the store with initial state
 function createMeditationStore() {
 	const { subscribe, set, update } = writable<MeditationState>({
 		selectedVisual: null,
-		selectedDuration: null
+		selectedDuration: null,
+		moodBefore: null,
+		intensityBefore: null,
+		moodAfter: null,
+		intensityAfter: null
 	});
 
 	return {
@@ -30,11 +38,31 @@ function createMeditationStore() {
 				selectedDuration: duration
 			}));
 		},
+		//set mood before meditation
+		setMoodBefore: (mood: string, intensity: number) => {
+			update(state => ({
+				...state,
+				moodBefore: mood,
+				intensityBefore: intensity
+			}));
+		},
+		//set mood after meditation
+		setMoodAfter: (mood: string, intensity: number) => {
+			update(state => ({
+				...state,
+				moodAfter: mood,
+				intensityAfter: intensity
+			}));
+		},
 		//set both visual and duration at once
 		setMeditation: (visual: VisualType, duration: number) => {
 			set({
 				selectedVisual: visual,
-				selectedDuration: duration
+				selectedDuration: duration,
+				moodBefore: null,
+				intensityBefore: null,
+				moodAfter: null,
+				intensityAfter: null
 			});
 		},
 		//get current visual selection
@@ -57,7 +85,11 @@ function createMeditationStore() {
 		getState: () => {
 			let currentState: MeditationState = {
 				selectedVisual: null,
-				selectedDuration: null
+				selectedDuration: null,
+				moodBefore: null,
+				intensityBefore: null,
+				moodAfter: null,
+				intensityAfter: null
 			};
 			subscribe(state => {
 				currentState = state;
@@ -82,7 +114,11 @@ function createMeditationStore() {
 		reset: () => {
 			set({ 
 				selectedVisual: null,
-				selectedDuration: null
+				selectedDuration: null,
+				moodBefore: null,
+				intensityBefore: null,
+				moodAfter: null,
+				intensityAfter: null
 			});
 		}
 	};

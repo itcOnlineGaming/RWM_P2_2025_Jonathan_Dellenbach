@@ -22,7 +22,7 @@
 			goto(`${base}/timerOptions`);
 			
 			//just show confirmation
-			alert(`Visual "${selectedVisual}" has been saved!`);
+			//alert(`Visual "${selectedVisual}" has been saved!`);
 		}
 	}
 </script>
