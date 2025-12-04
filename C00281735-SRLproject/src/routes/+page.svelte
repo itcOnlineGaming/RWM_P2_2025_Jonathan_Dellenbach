@@ -1,5 +1,6 @@
 <script lang="ts">
   import { base } from '$app/paths';
+  import { goto } from '$app/navigation';
   import { visualStore } from '$lib/stores/visualStore';
 
   let selectedMood = $state<string | null>(null);
@@ -47,11 +48,11 @@
           style="--mood-color: {mood.color}"
           onclick={() => selectMood(mood.label, mood.intensity)}
         >
-        <img 
-          src={`${base}/Images/${mood.icon}`} 
-          alt={mood.label} 
-          class="mood-icon"
-        />
+          <img 
+            src={`${base}/Images/${mood.icon}`} 
+            alt={mood.label} 
+            class="mood-icon"
+          />
         </button>
       {/each}
     </div>
@@ -66,7 +67,13 @@
 
 <div class="container">
   <div class="button-container">
-    <a href={`${base}/visualOptions`} class="submit-button">Go to Component!</a>
+    <button
+      class="submit-button"
+      disabled={!selectedMood}
+      onclick={() => goto(`${base}/visualOptions`)}
+    >
+      Go to Component!
+    </button>
   </div>
 </div>
 
@@ -172,17 +179,26 @@
     padding: 1rem 2rem;
     background-color: #69bd64;
     color: white;
-    text-decoration: none;
+    border: none;
     border-radius: 8px;
     font-weight: 600;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    cursor: pointer;
   }
 
-  .submit-button:hover {
+  .submit-button:hover:not(:disabled) {
     background-color: #59a155;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px);
+  }
+
+  /* Disabled button styling */
+  .submit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
   }
 
   @media (max-width: 600px) {
