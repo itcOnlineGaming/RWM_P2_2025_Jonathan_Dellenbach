@@ -1,5 +1,6 @@
 <script lang="ts">
   import { 
+    HomePage,
     VisualOption, 
     TimerOption,
     LavaLampVisual,
@@ -9,7 +10,7 @@
   } from '@my-srl/stress-timer';
   import { base } from '$app/paths';
   
-  let currentStep = $state<'visual' | 'timer' | 'meditation' | 'conclusion'>('visual');
+  let currentStep = $state<'home' | 'visual' | 'timer' | 'meditation' | 'conclusion'>('home');
   let selectedVisual = $state<string | null>(null);
   let selectedDuration = $state<number | null>(null);
   
@@ -18,6 +19,10 @@
   visualStore.subscribe(state => {
     storeState = state;
   });
+  
+  function handleHomeNavigate() {
+    currentStep = 'visual';
+  }
   
   function handleVisualSelect(visual: string) {
     selectedVisual = visual;
@@ -37,7 +42,6 @@
   function handleTimerStart() {
     if (selectedDuration) {
       visualStore.setDuration(selectedDuration);
-      visualStore.setMoodBefore('Stressed', 5);
       currentStep = 'meditation';
     }
   }
@@ -50,12 +54,17 @@
     visualStore.reset();
     selectedVisual = null;
     selectedDuration = null;
-    currentStep = 'visual';
+    currentStep = 'home';
   }
 </script>
 
-<div class={currentStep === 'conclusion' ? 'page-container conclusion-bg' : 'page-container'}>
-  {#if currentStep === 'visual'}
+<div class={currentStep === 'conclusion' || currentStep === 'home' ? 'page-container white-bg' : 'page-container'}>
+  {#if currentStep === 'home'}
+    <HomePage
+      imagesPath="{base}/Images"
+      onNavigate={handleHomeNavigate}
+    />
+  {:else if currentStep === 'visual'}
     <VisualOption 
       onSelect={handleVisualSelect}
       selectedVisual={selectedVisual}
@@ -100,7 +109,7 @@
     box-sizing: border-box;
   }
   
-  .conclusion-bg {
+  .white-bg {
     background-color: white !important;
   }
 </style>
