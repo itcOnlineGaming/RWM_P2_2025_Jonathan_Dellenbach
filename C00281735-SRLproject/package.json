@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
@@ -14,7 +17,9 @@
     "test": "npm run test:unit -- --run && npm run test:e2e",
     "test:e2e": "playwright test",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "package": "npm run package --workspace=@my-srl/stress-timer",
+    "package:watch": "npm run package --workspace=@my-srl/stress-timer -- --watch"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.2",
@@ -26,6 +31,7 @@
     "@storybook/sveltekit": "^10.0.7",
     "@sveltejs/adapter-auto": "^7.0.0",
     "@sveltejs/kit": "^2.47.1",
+    "@sveltejs/package": "^2.3.7",
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
     "@types/node": "^22",
     "@vitest/browser-playwright": "^4.0.5",
@@ -37,5 +43,8 @@
     "vite": "^7.1.10",
     "vitest": "^4.0.5",
     "vitest-browser-svelte": "^2.0.1"
+  },
+  "dependencies": {
+    "@my-srl/stress-timer": "workspace:*"
   }
 }

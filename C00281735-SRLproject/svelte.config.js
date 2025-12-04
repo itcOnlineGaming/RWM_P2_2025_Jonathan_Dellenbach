@@ -12,6 +12,9 @@ const config = {
 		}),
 		paths: {
 			base: process.env.VITEST ? '' : '/C00281735-SRLproject'
+		},
+		alias: {
+			'@my-srl/stress-timer': './packages/stress-timer/src'
 		}
 	},
 };

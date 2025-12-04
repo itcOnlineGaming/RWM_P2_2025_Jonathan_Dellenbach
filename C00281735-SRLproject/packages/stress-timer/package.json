@@ -1,0 +1,30 @@
+{
+  "name": "@my-srl/stress-timer",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "package": "svelte-package"
+  },
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./images/*": "./src/images/*"
+  },
+  "files": [
+    "dist",
+    "src/images"
+  ],
+  "peerDependencies": {
+    "svelte": "^5.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/package": "^2.3.7",
+    "svelte": "^5.0.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -4,6 +4,15 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
 	plugins: [sveltekit()],
+	server: {
+		fs: {
+			// Allow serving files from the packages directory
+			allow: ['..', 'packages']
+		}
+	},
+	optimizeDeps: {
+		exclude: ['@my-srl/stress-timer']
+	},
 	test: {
 		expect: { requireAssertions: true },
 		projects: [
